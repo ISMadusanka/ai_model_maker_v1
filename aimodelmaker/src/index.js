@@ -12,6 +12,7 @@ import ProjectsLayout from './layouts/ProjectsLayout';
 import ProjectListPage from './pages/Project/ProjectList/Index';
 import DashboardLayout from './layouts/DashboardLayout';
 import NewProjectPage from './pages/Project/NewProject/Index';
+import ImageClassifierPage from './pages/Dashboard/ImageClassifier/Index';
 
 const router = createBrowserRouter(
   [
@@ -59,8 +60,8 @@ const router = createBrowserRouter(
           element: <DashboardLayout/>,
           children: [
             {
-              path:'some',
-              element: <div><h1>DashHome</h1></div>
+              path:'m1',
+              element: <ImageClassifierPage/>
             }
           ]
         }

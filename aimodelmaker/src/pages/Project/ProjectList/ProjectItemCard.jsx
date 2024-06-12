@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-import './Index.css'; // Import the CSS file
+import './Index.css'; 
 
 function ProjectItemCard({projectID, name, description, icon}) {
   return (
