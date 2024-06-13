@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import PopupCard from './PopupCard';
 import './Index.css';
@@ -23,6 +23,16 @@ export default function ClassCard({ id, name, datacount, handleDeleteClassClick,
 
     
   }
+
+  function updateParentClasses() {
+    setClasses(classes.map((classItem) => 
+      classItem.id === id ? { ...classItem, images, datacount: images.length.toString() } : classItem
+    ));
+  }
+
+  useEffect(() => {
+    updateParentClasses();
+  }, [images]);
 
   return (
     <div className="class-card">

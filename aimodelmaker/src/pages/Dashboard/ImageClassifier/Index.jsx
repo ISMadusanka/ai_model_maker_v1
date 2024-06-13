@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Col, Container, Row, InputGroup, FormControl } from 'react-bootstrap';
 import ClassCard from './ClassCard';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './Index.css';
+import { dataGatherLoop , initializeModel, trainImageClassifier} from '../../../services/freemodels/ImageClassifier';
+import ImageClassifierPredict from '../../../components/ui/ImageClassifierPredict';
 
 export default function ImageClassifierPage() {
   const [classes, setClasses] = useState([
@@ -10,6 +12,7 @@ export default function ImageClassifierPage() {
     { id: 2, name: "Class 2", datacount: "0", images: [] },
   ]);
   const [newClassName, setNewClassName] = useState('');
+  const nodeRef = useRef(null);
 
   function handleAddClassClick() {
     if (newClassName.trim() !== '') {
@@ -29,8 +32,13 @@ export default function ImageClassifierPage() {
     setClasses(classes.filter((classItem) => classItem.id !== id));
   }
 
-  function handleTrainClick() {
+  async function handleTrainClick() {
     console.log(classes);
+    for (const classItem of classes) {
+      await dataGatherLoop(classItem.images,classItem.name, classItem.id - 1);
+    }
+    initializeModel();
+    trainImageClassifier();
   }
 
   function handleUpdateImages(classId, images) {
@@ -56,26 +64,37 @@ export default function ImageClassifierPage() {
       <Container className="mt-5">
         <Row>
           <TransitionGroup component={null}>
-            {classes.map((classItem) => (
-              <CSSTransition key={classItem.id} timeout={500} classNames="fade">
-                <Col md={4} className="mb-4">
-                  <ClassCard
-                    handleDeleteClassClick={handleDeleteClassClick}
-                    id={classItem.id}
-                    name={classItem.name}
-                    datacount={classItem.datacount}
-                    images={classItem.images}
-                    handleUpdateImages={handleUpdateImages}
-                  />
-                </Col>
-              </CSSTransition>
-            ))}
+            {classes.map((classItem) => {
+              return (
+                <CSSTransition
+                  key={classItem.id}
+                  timeout={500}
+                  classNames="fade"
+                  nodeRef={nodeRef}
+                >
+                  <Col md={4} className="mb-4" ref={nodeRef}>
+                    <ClassCard
+                      classes={classes}
+                      setClasses={setClasses}
+                      handleDeleteClassClick={handleDeleteClassClick}
+                      id={classItem.id}
+                      name={classItem.name}
+                      datacount={classItem.datacount}
+                      images={classItem.images}
+                      handleUpdateImages={handleUpdateImages}
+                    />
+                  </Col>
+                </CSSTransition>
+              );
+            })}
           </TransitionGroup>
         </Row>
       </Container>
       <Button variant="primary" onClick={handleTrainClick}>
         Train Model
       </Button>
+
+      <ImageClassifierPredict/>
     </div>
   );
 }
