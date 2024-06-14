@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Button, Col, Container, Row, InputGroup, FormControl } from 'react-bootstrap';
+import { Button, Col, Container, Row, InputGroup, FormControl, Modal } from 'react-bootstrap';
 import ClassCard from './ClassCard';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './Index.css';
-import { dataGatherLoop , initializeModel, trainImageClassifier} from '../../../services/freemodels/ImageClassifier';
+import { dataGatherLoop, initializeModel, trainImageClassifier } from '../../../services/freemodels/ImageClassifier';
 import ImageClassifierPredict from '../../../components/ui/ImageClassifierPredict';
 
 export default function ImageClassifierPage() {
@@ -12,6 +12,7 @@ export default function ImageClassifierPage() {
     { id: 2, name: "Class 2", datacount: "0", images: [] },
   ]);
   const [newClassName, setNewClassName] = useState('');
+  const [showPredictModal, setShowPredictModal] = useState(false); // State to control modal visibility
   const nodeRef = useRef(null);
 
   function handleAddClassClick() {
@@ -35,14 +36,14 @@ export default function ImageClassifierPage() {
   async function handleTrainClick() {
     console.log(classes);
     for (const classItem of classes) {
-      await dataGatherLoop(classItem.images,classItem.name, classItem.id - 1);
+      await dataGatherLoop(classItem.images, classItem.name, classItem.id - 1);
     }
     initializeModel();
     trainImageClassifier();
   }
 
   function handleUpdateImages(classId, images) {
-    setClasses(classes.map((classItem) => 
+    setClasses(classes.map((classItem) =>
       classItem.id === classId ? { ...classItem, images, datacount: images.length.toString() } : classItem
     ));
   }
@@ -93,8 +94,22 @@ export default function ImageClassifierPage() {
       <Button variant="primary" onClick={handleTrainClick}>
         Train Model
       </Button>
+        
+      <Button variant="primary" onClick={() => setShowPredictModal(true)}>Predict</Button>
 
-      <ImageClassifierPredict/>
+      <Modal show={showPredictModal} onHide={() => setShowPredictModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Predict</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ImageClassifierPredict />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowPredictModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

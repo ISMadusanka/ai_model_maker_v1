@@ -109,7 +109,7 @@ export function initializeModel() {
   });
 }
 
-export function predictLoop(VIDEO) {
+export function predictLoop(VIDEO, setPredictions) {
   tf.tidy(function () {
     let videoFrameAsTensor = tf.browser.fromPixels(VIDEO).div(255);
     let resizedTensorFrame = tf.image.resizeBilinear(
@@ -123,12 +123,25 @@ export function predictLoop(VIDEO) {
     let highestIndex = prediction.argMax().arraySync();
     let predictionArray = prediction.arraySync();
 
-    console.log(
-      "Prediction: " +
-        CLASS_NAMES[highestIndex] +
-        " with " +
-        Math.floor(predictionArray[highestIndex] * 100) +
-        "% confidence"
-    );
+    // console.log(
+    //   "Prediction: " +
+    //     CLASS_NAMES[highestIndex] +
+    //     " with " +
+    //     Math.floor(predictionArray[highestIndex] * 100) +
+    //     "% confidence"
+    // );
+
+    let predictData = [];
+    for (let i = 0; i < predictionArray.length; i++) {
+      const val = {
+        className : CLASS_NAMES[i],
+        value : predictionArray[i]
+      }
+      predictData.push(val);
+    }
+
+    setPredictions(predictData);
+    console.log(predictData)
+
   });
 }

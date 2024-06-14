@@ -12,7 +12,7 @@ export default function PopupCard({ id, name, images, handleClose, handleCapture
     setIsCapturing(true);
     captureIntervalRef.current = setInterval(() => {
       captureImage();
-    }, 500); // 2 images per second
+    }, 200); // 2 images per second
   }
 
   function handleStopCapture() {
