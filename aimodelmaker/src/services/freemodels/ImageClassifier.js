@@ -86,7 +86,9 @@ export async function loadMobileNetFeatureModel() {
   });
 }
 
-loadMobileNetFeatureModel();
+export async function loadImageClassifierModel() {
+  await loadMobileNetFeatureModel();
+}
 
 export let model = tf.sequential();
 

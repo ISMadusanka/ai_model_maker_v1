@@ -3,10 +3,21 @@ import { Button, Col, Container, Row, InputGroup, FormControl, Modal } from 'rea
 import ClassCard from './ClassCard';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './Index.css';
-import { dataGatherLoop, initializeModel, trainImageClassifier } from '../../../services/freemodels/ImageClassifier';
+import { dataGatherLoop, initializeModel, loadImageClassifierModel, trainImageClassifier } from '../../../services/freemodels/ImageClassifier';
 import ImageClassifierPredict from '../../../components/ui/ImageClassifierPredict';
+import { useNavigation } from 'react-router-dom';
+
+
+//loader
+export async function ImageClassifierPageLoader(){
+  
+  await loadImageClassifierModel();
+  return null;
+}
 
 export default function ImageClassifierPage() {
+
+  const navigation = useNavigation();
   const [classes, setClasses] = useState([
     { id: 1, name: "Class 1", datacount: "0", images: [] },
     { id: 2, name: "Class 2", datacount: "0", images: [] },
@@ -14,6 +25,11 @@ export default function ImageClassifierPage() {
   const [newClassName, setNewClassName] = useState('');
   const [showPredictModal, setShowPredictModal] = useState(false); // State to control modal visibility
   const nodeRef = useRef(null);
+
+  console.log(navigation.state);
+  if (navigation.state === 'loading') {
+    return <div>Loading...</div>; 
+  }
 
   function handleAddClassClick() {
     if (newClassName.trim() !== '') {

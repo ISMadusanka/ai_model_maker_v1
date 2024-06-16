@@ -12,24 +12,31 @@ import ProjectsLayout from './layouts/ProjectsLayout';
 import ProjectListPage from './pages/Project/ProjectList/Index';
 import DashboardLayout from './layouts/DashboardLayout';
 import NewProjectPage from './pages/Project/NewProject/Index';
-import ImageClassifierPage from './pages/Dashboard/ImageClassifier/Index';
+import ImageClassifierPage, { ImageClassifierPageLoader } from './pages/Dashboard/ImageClassifier/Index';
+import ErrorPage from './pages/Error/ErrorPage';
 
 const router = createBrowserRouter(
   [
     {
       path: '/',
       element: <App/>,
+      errorElement: <ErrorPage/>,
       children: [
-        {
-          path: 'home',
-          element: <HomeLayout/>,
+        { 
+          path: '/', 
+          element: <HomeLayout />,
           children: [
             {
-              path:'aimodeler',
+              index: true,
               element: <HomePage/>
+            },
+            {
+              path: 's',
+              element: <SignInPage/>
             }
           ]
         },
+        
         {
           
           path:'signin',
@@ -56,11 +63,12 @@ const router = createBrowserRouter(
           ]
         },
         {
-          path: 'projects/:projectID',
+          path: 'projects/:projectId',
           element: <DashboardLayout/>,
           children: [
             {
-              path:'m1',
+              index:true,
+              loader: ImageClassifierPageLoader, //async function to load the page. while loading, loading state will be shown
               element: <ImageClassifierPage/>
             }
           ]

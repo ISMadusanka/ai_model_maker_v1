@@ -32,7 +32,7 @@ const DashboardLayout = () => {
           </NavLink>
           <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')}>
             <FaCog />
-            <span>Settings</span>
+            <span>Settings</span>  
           </NavLink>
         </nav>
         <Button>Create New</Button>
