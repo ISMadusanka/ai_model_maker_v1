@@ -47,7 +47,7 @@ export async function dataGatherLoop(images, name, classIndex) {
   }
 }
 
-export async function trainImageClassifier() {
+export async function trainImageClassifier({setProgress}) {
   //predict = false;
   tf.util.shuffleCombo(trainingDataInputs, trainingDataOutputs);
   let outputsAsTensor = tf.tensor1d(trainingDataOutputs, "int32");
@@ -58,7 +58,7 @@ export async function trainImageClassifier() {
     shuffle: true,
     batchSize: 5,
     epochs: 10,
-    callbacks: { onEpochEnd: logProgress },
+    callbacks: { onEpochEnd: (epochs,logs)=>{setProgress(epochs)} },
   });
 
   outputsAsTensor.dispose();
@@ -67,6 +67,8 @@ export async function trainImageClassifier() {
   //predict = true;
   //predictLoop();
 }
+
+
 
 function logProgress(epoch, logs) {
   console.log("Data for epoch " + epoch, logs);
@@ -147,3 +149,22 @@ export function predictLoop(VIDEO, setPredictions) {
 
   });
 }
+
+export async function saveModelToLocalStorage() {
+  try {
+    await model.save('localstorage://my-model');
+    console.log('Model saved to local storage.');
+  } catch (error) {
+    console.error('Error saving model to local storage:', error);
+  }
+}
+
+export async function loadModelFromLocalStorage() {
+  try {
+    model = await tf.loadLayersModel('localstorage://my-model');
+    console.log('Model loaded from local storage.');
+  } catch (error) {
+    console.error('Error loading model from local storage:', error);
+  }
+}
+  

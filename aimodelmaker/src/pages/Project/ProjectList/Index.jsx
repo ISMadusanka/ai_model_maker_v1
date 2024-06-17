@@ -64,7 +64,7 @@ export default function ProjectListPage() {
         </Col>
         {projects.map((project) => (
           <Col md={4} className="mb-4" key={project.id}>
-            <Link to={`/projects/${project.id}`} >
+            <Link to="/projects" >
             <ProjectItemCard
               projectID={project.id}
               name={project.name}

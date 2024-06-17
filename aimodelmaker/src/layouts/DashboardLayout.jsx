@@ -22,15 +22,15 @@ const DashboardLayout = () => {
           <FaBars className="menu-icon" onClick={toggleSidebar} />
         </div>
         <nav className="sidebar-nav">
-          <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <NavLink to="/projects" className={({ isActive }) => (isActive ? 'active' : '')}>
             <FaHome />
             <span>Train</span>
           </NavLink>
-          <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <NavLink to="models" className={({ isActive }) => (isActive ? 'active' : '')}>
             <FaUser />
             <span>Models</span>
           </NavLink>
-          <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <NavLink to="settings" className={({ isActive }) => (isActive ? 'active' : '')}>
             <FaCog />
             <span>Settings</span>  
           </NavLink>

@@ -14,6 +14,10 @@ import DashboardLayout from './layouts/DashboardLayout';
 import NewProjectPage from './pages/Project/NewProject/Index';
 import ImageClassifierPage, { ImageClassifierPageLoader } from './pages/Dashboard/ImageClassifier/Index';
 import ErrorPage from './pages/Error/ErrorPage';
+import ModelsPage from './pages/Dashboard/Models/ModelsPage';
+import SettingsPage from './pages/Dashboard/Settings/SettingsPage';
+import AuthProvider from './services/authentication/AuthProvider';
+import ProtectedRoute from './services/authentication/ProtectedRoute';
 
 const router = createBrowserRouter(
   [
@@ -50,7 +54,7 @@ const router = createBrowserRouter(
 
         {
           path:'projects',
-          element: <ProjectsLayout/>,
+          element: <ProtectedRoute><ProjectsLayout/></ProtectedRoute>,
           children: [
             {
               path: 'allprojects',
@@ -63,13 +67,21 @@ const router = createBrowserRouter(
           ]
         },
         {
-          path: 'projects/:projectId',
+          path: 'projects',
           element: <DashboardLayout/>,
           children: [
             {
               index:true,
               loader: ImageClassifierPageLoader, //async function to load the page. while loading, loading state will be shown
               element: <ImageClassifierPage/>
+            },
+            {
+              path: 'models',
+              element: <ModelsPage/>
+            },
+            {
+              path: 'settings',
+              element: <SettingsPage/>
             }
           ]
         }
@@ -81,7 +93,9 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <AuthProvider>
+      <RouterProvider router={router}/>
+    </AuthProvider>
   </React.StrictMode>
 );
 
