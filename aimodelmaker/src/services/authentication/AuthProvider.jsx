@@ -9,6 +9,7 @@ export default function AuthProvider({children}) {
     const [token, setToken] = useState(null);
 
     useEffect(() => {
+        console.log('useEffect');
         const fetchMe = async ()=> {
             try {
                 const response = await api.get('/auth/me');
@@ -23,6 +24,8 @@ export default function AuthProvider({children}) {
     }, []);
     
     useLayoutEffect(() => {
+        console.log('useLay1Effect');
+
         const intercepter = api.interceptors.response.use((config)=>{
             config.headers.Authorization = !config._retry && token ? `Bearer ${token}` : config.headers.Authorization;
             return config;
@@ -35,6 +38,8 @@ export default function AuthProvider({children}) {
     }, [token]);
 
     useLayoutEffect(() => {
+        console.log('useLay2Effect');
+
         const refresIntercepter = api.interceptors.response.use(
             (response)=>response,
             async (error)=>{
