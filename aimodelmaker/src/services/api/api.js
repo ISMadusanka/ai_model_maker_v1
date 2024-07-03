@@ -2,11 +2,13 @@ import axios from 'axios';
 
 // Create an Axios instance
 const api = axios.create({
-  baseURL: 'http://localhost:4000', // Replace with your actual API base URL
+  baseURL: 'http://localhost:4000', 
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true
 });
+
 
 // Request interceptor to add the authorization token to headers
 api.interceptors.request.use(
