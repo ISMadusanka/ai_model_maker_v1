@@ -24,7 +24,6 @@ const requireAuth = (req, res, next) => {
                 // res.redirect('/signin');
                 return res.status(403).json({ message: 'Unauthorized' });
             }else{
-                console.log(decodedToken);
                 next();
             }
         });
