@@ -2,10 +2,14 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import Button from 'react-bootstrap/Button'; // Import the Button component
+import Button from 'react-bootstrap/Button';
 import React from 'react';
+import { useAuth } from '../services/authentication/AuthProvider';
+import { FaUserCircle } from 'react-icons/fa'; // Import user icon
 
 function HomeNavBar() {
+  const user = useAuth();
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -27,7 +31,23 @@ function HomeNavBar() {
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
-          <Button variant="outline-primary" href="/signin">Login</Button> {/* Add the login button */}
+          {user ? (
+            <>
+              <Button variant="outline-primary" href="/projects/allprojects" className="me-2">
+                Go to Console
+              </Button>
+              <NavDropdown
+                title={<FaUserCircle size={24} />}
+                id="user-nav-dropdown"
+                alignRight
+              >
+                <NavDropdown.Item href="/profile">View Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/logout">Log Out</NavDropdown.Item>
+              </NavDropdown>
+            </>
+          ) : (
+            <Button variant="outline-primary" href="/signin">Login</Button>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>

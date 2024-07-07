@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please enter a password'],
         minlength: [6, 'Minimum password length is 6 characters'],
     },
+    projects: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Project',
+    }
 });
 
 //fire a function before doc saved to db
@@ -45,6 +49,13 @@ userSchema.statics.login = async function(email, password) {
         throw Error('incorrect password');
     }
     throw Error('incorrect email');
+}
+
+// method to add project ID to projects array
+userSchema.methods.addProject = async function(projectId) {
+    this.projects.push(projectId);
+    await this.save();
+    return this;
 }
 
 

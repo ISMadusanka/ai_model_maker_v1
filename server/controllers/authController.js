@@ -68,7 +68,7 @@ module.exports.profile_get = (req,res) => {
     // });
     
     res.json({
-        email:"test@t"
+        email:res.locals.user.email
     });
 }
 
