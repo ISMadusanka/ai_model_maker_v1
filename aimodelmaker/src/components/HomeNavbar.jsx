@@ -18,8 +18,7 @@ function HomeNavBar() {
       }
     }).catch((error) => {
       console.log(error);
-    }
-    );
+    });
   }
 
   return (
@@ -51,7 +50,7 @@ function HomeNavBar() {
               <NavDropdown
                 title={<FaUserCircle size={24} />}
                 id="user-nav-dropdown"
-                alignRight
+                align="end"  // Correct prop for right alignment
               >
                 <NavDropdown.Item href="/profile">View Profile</NavDropdown.Item>
                 <NavDropdown.Item onClick={onlogoutclick}>Log Out</NavDropdown.Item>

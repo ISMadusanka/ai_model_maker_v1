@@ -39,23 +39,33 @@ class MasterForm extends Component {
     });
   }
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
-    const { name, modelId, password } = this.state;
-    alert(`Your registration detail: \n 
-      Name: ${name} \n 
-      modelId: ${modelId} \n
-      Password: ${password}`);
+    const { name, modelId } = this.state;
 
-      api.post('/addproject', {
-        name,
-        modelId
-      }).then((response) => {
-        console.log(response);
-      }).catch((error) => {
-        console.log(error);
-      });
-  };
+    if (!name || !modelId) {
+        console.error("Name and modelId are required.");
+        return;
+    }
+
+    try {
+        const response = await api.post('/addproject', { name, modelId });
+        console.log("Project added successfully:", response.data);
+        window.location.href = '/projects/allprojects';
+    } catch (error) {
+        if (error.response) {
+            // Server responded with a status other than 2xx
+            console.error("Server responded with an error:", error.response.data);
+        } else if (error.request) {
+            // Request was made but no response received
+            console.error("No response received:", error.request);
+        } else {
+            // Something happened in setting up the request
+            console.error("Error in request setup:", error.message);
+        }
+    }
+};
+
 
   _next() {
     let currentStep = this.state.currentStep;
