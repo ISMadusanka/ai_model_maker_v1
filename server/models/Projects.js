@@ -18,7 +18,7 @@ const projectSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please enter a project name']
     },
-    modelID:{
+    modelId:{
         type: String,
         required: [true, 'ModelID is requeired']
     },

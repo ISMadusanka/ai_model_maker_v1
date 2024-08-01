@@ -4,9 +4,10 @@ const User = require("../models/Users");
 module.exports.allproject_get = (req, res) => {};
 
 module.exports.addproject_post = async (req, res) => {
+  const { name, modelId, models } = req.body;
   const projectData = {
-    name: "Project Name",
-    modelID: "1",
+    name: name,
+    modelId: modelId,
     models: [
       { name: "Model1", file: "/path/to/file1.txt" },
       { name: "Model2", file: "/path/to/file2.tsd" },
@@ -16,7 +17,7 @@ module.exports.addproject_post = async (req, res) => {
   try {
     const newProject = await Project.createProject(projectData);
     //modify this code using res.loacl.user
-    const user = await User.findById('66893ffe136db47b385cc253');
+    const user = await User.findById(res.locals.user._id);
     if (user) {
       await user.addProject(newProject._id);
     } else {

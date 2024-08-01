@@ -7,6 +7,6 @@ const { allproject_get, addproject_post } = require('../controllers/projectContr
 router = Router();
 
 router.get('/allprojects',requireAuth,allproject_get);
-router.post('/addproject',addproject_post);
+router.post('/addproject',requireAuth,addproject_post);
 
 module.exports = router;

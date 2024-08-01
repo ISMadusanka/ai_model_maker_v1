@@ -14,6 +14,7 @@ import MultiStepProgressBar from "./MultiStepProgressBar";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
+import api from '../../../../services/api/api';
 
 class MasterForm extends Component {
   constructor(props) {
@@ -45,6 +46,15 @@ class MasterForm extends Component {
       Name: ${name} \n 
       modelId: ${modelId} \n
       Password: ${password}`);
+
+      api.post('/addproject', {
+        name,
+        modelId
+      }).then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
   };
 
   _next() {
