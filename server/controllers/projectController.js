@@ -1,7 +1,25 @@
 const Project = require("../models/Projects");
 const User = require("../models/Users");
 
-module.exports.allproject_get = (req, res) => {};
+module.exports.allproject_get = async (req, res) => {
+  try {
+    // Find the user by their ID from the res.locals object
+    const user = await User.findById(res.locals.user._id).populate('projects');
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Find all projects associated with the user
+    const projects = await Project.find({ _id: { $in: user.projects } });
+
+    // Respond with the list of projects
+    res.status(200).json(projects);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
 module.exports.addproject_post = async (req, res) => {
   const { name, modelId, models } = req.body;

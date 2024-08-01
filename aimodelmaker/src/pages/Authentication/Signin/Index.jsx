@@ -18,7 +18,9 @@ function SignInPage() {
       console.log(response);
 
       // navigate to projects page
-      navigate('/projects/allprojects', {replace: true});
+      if (response.status === 200) {
+        window.location.href = '/';
+      }
     
     }).catch((error) => {
       console.log(error);

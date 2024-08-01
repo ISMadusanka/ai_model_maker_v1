@@ -16,6 +16,9 @@ function SignUpPage() {
       password
     }).then((response) => {
       console.log(response);
+      if (response.status === 200) {
+        window.location.href = '/';
+      }
     }).catch((error) => {
       console.log(error);
     });

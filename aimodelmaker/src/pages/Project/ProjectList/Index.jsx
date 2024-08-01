@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ProjectItemCard from './ProjectItemCard';
 import { Link } from 'react-router-dom';
+import api from '../../../services/api/api';
 
 export default function ProjectListPage() {
   const projects = [
@@ -41,9 +42,19 @@ export default function ProjectListPage() {
         id: 6,
         name: "Your Story",
         description: "your-story-20bf2",
-        icon: 'i'
+        icon: 'isc'
       }
   ];
+
+  useEffect(() => {
+    api.get('/allprojects')
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <Container className="mt-5">

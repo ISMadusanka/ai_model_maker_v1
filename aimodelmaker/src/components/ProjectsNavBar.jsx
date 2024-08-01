@@ -8,7 +8,7 @@ function ProjectsNavBar() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="/home/aimodeler">AIModeler</Navbar.Brand>
+        <Navbar.Brand href="/">AIModeler</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto"> {/* Move items to the end of the navbar */}

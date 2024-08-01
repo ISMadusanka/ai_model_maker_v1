@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Button, Col, Container, Row, InputGroup, FormControl, Modal } from 'react-bootstrap';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Col, Container, Row, InputGroup, FormControl, Modal, Spinner } from 'react-bootstrap';
 import ClassCard from './ClassCard';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './Index.css';
@@ -23,13 +23,17 @@ export default function ImageClassifierPage() {
   const [newClassName, setNewClassName] = useState('');
   const [showPredictModal, setShowPredictModal] = useState(false);
   const [showLoadingBarModal, setShowLoadingBarModal] = useState(false); // State to control loading bar modal visibility
+  const [isLoading, setIsLoading] = useState(true); // State to manage loading indicator
   const nodeRef = useRef(null);
   const [trainProgress, setTrainProgress] = useState(0);
 
-  console.log(navigation.state);
-  if (navigation.state === 'loading') {
-    return <div>Loading...</div>; 
-  }
+  useEffect(() => {
+    async function loadModel() {
+      await loadImageClassifierModel();
+      setIsLoading(false);
+    }
+    loadModel();
+  }, []);
 
   function handleAddClassClick() {
     if (newClassName.trim() !== '') {
@@ -78,76 +82,86 @@ export default function ImageClassifierPage() {
 
   return (
     <div>
-      <InputGroup className="mb-3">
-        <FormControl
-          type="text"
-          value={newClassName}
-          onChange={(e) => setNewClassName(e.target.value)}
-          placeholder="Enter Class Name"
-        />
-        <Button variant="primary" onClick={handleAddClassClick}>
-          Add New Class (Category)
-        </Button>
-      </InputGroup>
+      {isLoading ? (
+        <div className="loading-container">
+          <Spinner animation="border" role="status">
+            <span className="sr-only"></span>
+          </Spinner>
+        </div>
+      ) : (
+        <>
+          <InputGroup className="mb-3">
+            <FormControl
+              type="text"
+              value={newClassName}
+              onChange={(e) => setNewClassName(e.target.value)}
+              placeholder="Enter Class Name"
+            />
+            <Button variant="primary" onClick={handleAddClassClick}>
+              Add New Class (Category)
+            </Button>
+          </InputGroup>
 
-      <Container className="mt-5">
-        <Row>
-          <TransitionGroup component={null}>
-            {classes.map((classItem) => {
-              return (
-                <CSSTransition
-                  key={classItem.id}
-                  timeout={500}
-                  classNames="fade"
-                  nodeRef={nodeRef}
-                >
-                  <Col md={4} className="mb-4" ref={nodeRef}>
-                    <ClassCard
-                      classes={classes}
-                      setClasses={setClasses}
-                      handleDeleteClassClick={handleDeleteClassClick}
-                      id={classItem.id}
-                      name={classItem.name}
-                      datacount={classItem.datacount}
-                      images={classItem.images}
-                      handleUpdateImages={handleUpdateImages}
-                    />
-                  </Col>
-                </CSSTransition>
-              );
-            })}
-          </TransitionGroup>
-        </Row>
-      </Container>
-      <Button variant="primary" onClick={handleTrainClick}>
-        Train Model
-      </Button>
-        
-      <Button variant="primary" onClick={() => setShowPredictModal(true)}>Predict</Button>
-      <Button onClick={hc}>Load</Button>
-
-      <Modal show={showPredictModal} onHide={() => setShowPredictModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Predict</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <ImageClassifierPredict />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowPredictModal(false)}>
-            Close
+          <Container className="mt-5">
+            <Row>
+              <TransitionGroup component={null}>
+                {classes.map((classItem) => {
+                  return (
+                    <CSSTransition
+                      key={classItem.id}
+                      timeout={500}
+                      classNames="fade"
+                      nodeRef={nodeRef}
+                    >
+                      <Col md={4} className="mb-4" ref={nodeRef}>
+                        <ClassCard
+                          classes={classes}
+                          setClasses={setClasses}
+                          handleDeleteClassClick={handleDeleteClassClick}
+                          id={classItem.id}
+                          name={classItem.name}
+                          datacount={classItem.datacount}
+                          images={classItem.images}
+                          handleUpdateImages={handleUpdateImages}
+                        />
+                      </Col>
+                    </CSSTransition>
+                  );
+                })}
+              </TransitionGroup>
+            </Row>
+          </Container>
+          <Button variant="primary" onClick={handleTrainClick}>
+            Train Model
           </Button>
-        </Modal.Footer>
-      </Modal>
+            
+          <Button variant="primary" onClick={() => setShowPredictModal(true)}>Predict</Button>
+          <Button onClick={hc}>Load</Button>
 
-      <Modal show={showLoadingBarModal} centered>
-        <Modal.Header>
-          <Modal.Title>Training Model</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <LoadingBar progress={(trainProgress + 1) / 10} />
-        </Modal.Body>
-      </Modal>
+          <Modal show={showPredictModal} onHide={() => setShowPredictModal(false)} centered>
+            <Modal.Header closeButton>
+              <Modal.Title>Predict</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ImageClassifierPredict />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowPredictModal(false)}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal show={showLoadingBarModal} centered>
+            <Modal.Header>
+              <Modal.Title>Training Model</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <LoadingBar progress={(trainProgress + 1) / 10} />
+            </Modal.Body>
+          </Modal>
+        </>
+      )}
     </div>
   );
 }

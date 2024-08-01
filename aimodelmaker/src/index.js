@@ -72,7 +72,7 @@ const router = createBrowserRouter(
           children: [
             {
               index:true,
-              loader: ImageClassifierPageLoader, //async function to load the page. while loading, loading state will be shown
+              //async function to load the page. while loading, loading state will be shown
               element: <ImageClassifierPage/>
             },
             {

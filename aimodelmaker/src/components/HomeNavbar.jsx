@@ -6,14 +6,26 @@ import Button from 'react-bootstrap/Button';
 import React from 'react';
 import { useAuth } from '../services/authentication/AuthProvider';
 import { FaUserCircle } from 'react-icons/fa'; // Import user icon
+import api from '../services/api/api';
 
 function HomeNavBar() {
   const user = useAuth();
 
+  const onlogoutclick = ()=>{
+    api.get('/logout').then((response) => {
+      if (response.status === 200) {
+        window.location.href = '/';
+      }
+    }).catch((error) => {
+      console.log(error);
+    }
+    );
+  }
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="/home/aimodeler">AIModeler</Navbar.Brand>
+        <Navbar.Brand href="/">AIModeler</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -42,7 +54,7 @@ function HomeNavBar() {
                 alignRight
               >
                 <NavDropdown.Item href="/profile">View Profile</NavDropdown.Item>
-                <NavDropdown.Item href="/logout">Log Out</NavDropdown.Item>
+                <NavDropdown.Item onClick={onlogoutclick}>Log Out</NavDropdown.Item>
               </NavDropdown>
             </>
           ) : (
