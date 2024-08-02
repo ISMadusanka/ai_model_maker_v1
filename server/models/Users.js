@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
 
 //fire a function before doc saved to db
 userSchema.pre('save', async function(next) {
-    console.log('user about to be created', this);
 
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
@@ -33,7 +32,6 @@ userSchema.pre('save', async function(next) {
 
 //fire a function after doc saved to db
 userSchema.post('save', function(doc, next) {
-    console.log('user created and saved', doc);
     next();
 });
 

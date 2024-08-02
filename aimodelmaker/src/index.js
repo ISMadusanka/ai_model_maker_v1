@@ -18,6 +18,9 @@ import ModelsPage from './pages/Dashboard/Models/ModelsPage';
 import SettingsPage from './pages/Dashboard/Settings/SettingsPage';
 import AuthProvider from './services/authentication/AuthProvider';
 import ProtectedRoute from './services/authentication/ProtectedRoute';
+import { DashboardProvider } from './context/DashboardProvider';
+
+
 
 const router = createBrowserRouter(
   [
@@ -68,13 +71,9 @@ const router = createBrowserRouter(
         },
         {
           path: 'projects',
-          element: <DashboardLayout/>,
+          element: <DashboardLayout/> ,
           children: [
-            {
-              index:true,
-              //async function to load the page. while loading, loading state will be shown
-              element: <ImageClassifierPage/>
-            },
+            
             {
               path: 'models',
               element: <ModelsPage/>
@@ -82,7 +81,11 @@ const router = createBrowserRouter(
             {
               path: 'settings',
               element: <SettingsPage/>
-            }
+            },
+            {
+              index:true,
+              element: <ImageClassifierPage/>
+            },
           ]
         }
       ]
@@ -94,7 +97,10 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthProvider>
+      <DashboardProvider>
       <RouterProvider router={router}/>
+
+      </DashboardProvider>
     </AuthProvider>
   </React.StrictMode>
 );

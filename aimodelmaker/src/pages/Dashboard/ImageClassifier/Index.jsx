@@ -5,8 +5,9 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './Index.css';
 import { dataGatherLoop, initializeModel, loadImageClassifierModel, loadModelFromLocalStorage, saveModelToLocalStorage, trainImageClassifier } from '../../../services/freemodels/ImageClassifier';
 import ImageClassifierPredict from '../../../components/ui/ImageClassifierPredict';
-import { useNavigation } from 'react-router-dom';
+import { useNavigation, useParams } from 'react-router-dom';
 import LoadingBar from '../../../components/ui/LoadingBar';
+import { useDashboard } from '../../../context/DashboardProvider';
 
 //loader
 export async function ImageClassifierPageLoader(){
@@ -26,7 +27,9 @@ export default function ImageClassifierPage() {
   const [isLoading, setIsLoading] = useState(true); // State to manage loading indicator
   const nodeRef = useRef(null);
   const [trainProgress, setTrainProgress] = useState(0);
-
+  const { dashboardProps, setDashboardProps } = useDashboard();
+  const { projectID } = dashboardProps;
+  console.log(projectID);
   useEffect(() => {
     async function loadModel() {
       await loadImageClassifierModel();
@@ -60,7 +63,7 @@ export default function ImageClassifierPage() {
       await dataGatherLoop(classItem.images, classItem.name, classItem.id - 1);
     }
     initializeModel();
-    trainImageClassifier({ setProgress: (progress) => {
+    trainImageClassifier({projectId:projectID,modelName:"model name", setProgress: (progress) => {
       setTrainProgress(progress);
       if (progress >= 9) {
         setShowLoadingBarModal(false); // Hide the loading bar modal when progress reaches 9

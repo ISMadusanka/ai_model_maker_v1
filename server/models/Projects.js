@@ -44,6 +44,8 @@ projectSchema.statics.deleteProject = async function(projectId) {
     await this.findByIdAndDelete(projectId);
 };
 
+
+
 // Create the Project model
 const Project = mongoose.model('Project', projectSchema);
 

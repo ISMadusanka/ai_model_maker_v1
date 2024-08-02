@@ -1,33 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faPlay } from '@fortawesome/free-solid-svg-icons';
 import './ModelsPage.css'; // Assuming you create a CSS file for styles
+import api from '../../../services/api/api';
+import { useDashboard } from '../../../context/DashboardProvider';
 
 export default function ModelsPage() {
+    const { dashboardProps } = useDashboard();
+    const [models, setModels] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const models = [
-        {
-            name: 'Model 1',
-            description: 'This is a model'
-        },
-        {
-            name: 'Model 2',
-            description: 'This is a model'
-        },
-        {
-            name: 'Model 3',
-            description: 'This is a model'
-        }
-    ];
+    useEffect(() => {
+        api.get('/getallmodels')
+            .then(response => {
+                setModels(response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.log(error);
+                setLoading(false);
+            });
+    }, []);
 
-    if (models.length === 0) {
-        return (
-            <div>No models found</div>
-        )
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
-    function handlePlayClick() {
-        
+    if (models.length === 0) {
+        return <div>No models found</div>;
+    }
+
+    function handlePlayClick(model) {
+        console.log(`Play model: ${model.name}`);
+    }
+
+    function handleDeleteClick(model) {
+        console.log(`Delete model: ${model.name}`);
     }
 
     return (
@@ -41,10 +49,10 @@ export default function ModelsPage() {
                             <p>{model.description}</p>
                         </div>
                         <div className="model-actions">
-                            <button className="icon-button" onClick={handlePlayClick()}>
+                            <button className="icon-button" onClick={() => handlePlayClick(model)}>
                                 <FontAwesomeIcon icon={faPlay} />
                             </button>
-                            <button className="icon-button">
+                            <button className="icon-button" onClick={() => handleDeleteClick(model)}>
                                 <FontAwesomeIcon icon={faTrashAlt} />
                             </button>
                         </div>

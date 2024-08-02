@@ -8,7 +8,7 @@ import { Button } from 'react-bootstrap';
 
 const DashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+ 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };

@@ -1,5 +1,7 @@
 import * as tf from "@tensorflow/tfjs";
 
+import api from '../api/api'
+
 const MOBILE_NET_INPUT_WIDTH = 224;
 const MOBILE_NET_INPUT_HEIGHT = 224;
 const STOP_DATA_GATHER = -1;
@@ -47,7 +49,7 @@ export async function dataGatherLoop(images, name, classIndex) {
   }
 }
 
-export async function trainImageClassifier({setProgress}) {
+export async function trainImageClassifier({projectId, modelName,setProgress}) {
   //predict = false;
   tf.util.shuffleCombo(trainingDataInputs, trainingDataOutputs);
   let outputsAsTensor = tf.tensor1d(trainingDataOutputs, "int32");
@@ -60,6 +62,8 @@ export async function trainImageClassifier({setProgress}) {
     epochs: 10,
     callbacks: { onEpochEnd: (epochs,logs)=>{setProgress(epochs)} },
   });
+
+  await saveModelToDatabase(projectId, modelName);
 
   outputsAsTensor.dispose();
   oneHotOutputs.dispose();
@@ -158,6 +162,34 @@ export async function saveModelToLocalStorage() {
     console.error('Error saving model to local storage:', error);
   }
 }
+
+export async function saveModelToDatabase(projectId, modelName) {
+  try {
+    const modelJSON = await model.toJSON();
+    const weightData = await model.save(tf.io.withSaveHandler(async (artifacts) => artifacts));
+
+    const modelData = {
+      projectId: projectId,
+      modelName: modelName,
+      modelJSON: modelJSON,
+      modelWeights: weightData.weightData,
+      weightSpecs: weightData.weightSpecs
+    };
+    api.post('/addmodel', modelData)
+    .then(res => {
+      console.log(res);
+      console.log(res.data);
+    }).
+    catch(err => {
+      console.log(err);
+    });
+
+   
+  } catch (error) {
+    console.error('Error saving model to database:', error);
+  }
+}
+
 
 export async function loadModelFromLocalStorage() {
   try {
