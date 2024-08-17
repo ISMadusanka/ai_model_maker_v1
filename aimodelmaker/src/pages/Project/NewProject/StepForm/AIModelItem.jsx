@@ -1,33 +1,27 @@
-import React from 'react';
-import Card from 'react-bootstrap/Card';
-import './MultiStepProgressBar.css'; // Import the CSS file
-import { Button } from 'reactstrap';
+import React from "react";
+import { Card, CardContent, Typography, Button } from "@mui/material";
 
-function AIModelItem({modelId, name, description, icon,_next, handleChange}) {
-
-    const handleSelect = (e) => {
-        e.preventDefault(); // Prevent form submission
-        handleChange({ target: { name: 'modelId', value: modelId } }); // Call the handleChange function
-        _next(); // Call the _next function
-      };
+function AIModelItem({ modelId, name, description, icon, _next, handleChange }) {
+  const handleSelect = (e) => {
+    e.preventDefault(); 
+    handleChange({ target: { name: "modelId", value: modelId } }); 
+    _next();
+  };
 
   return (
-    <Card className="card">
-      <Card.Body>
-        <Card.Title className="card-title">{name}</Card.Title>
-        <Card.Text className="card-text">
+    <Card variant="outlined" sx={{ borderRadius: 2, boxShadow: 3 }}>
+      <CardContent>
+        <Typography variant="h6" component="div">
+          {name}
+        </Typography>
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {description}
-        </Card.Text>
-        <div className="card-icon">
-          {icon}
-        </div>
-
-        
-      </Card.Body>
-
-      <Button color="primary float-right" onClick={handleSelect}>
-          Select
-        </Button>
+        </Typography>
+        <Typography variant="body2">{icon}</Typography>
+      </CardContent>
+      <Button variant="contained" color="primary" onClick={handleSelect} sx={{ m: 2 }}>
+        Select
+      </Button>
     </Card>
   );
 }

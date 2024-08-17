@@ -9,11 +9,11 @@ export default function ImageClassifierPredict({ MOBILE_NET_INPUT_HEIGHT, MOBILE
   const [predict, setPredict] = useState(false);
   const [showCard, setShowCard] = useState(true);
   const [predictions, setPredictions] = useState([]);
-
+  console.log(CLASS_NAMES);
   useEffect(() => {
     if (webcamRef.current && predict) {
       const interval = setInterval(() => {
-        predictLoop(webcamRef.current.video, setPredictions);
+        predictLoop(webcamRef.current.video, setPredictions,model,CLASS_NAMES);
       }, 250); // Call predictLoop every 250 milisecond
 
       return () => clearInterval(interval);

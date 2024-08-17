@@ -1,7 +1,7 @@
 import React from "react";
-import { FormGroup, Label, Input, Button } from "reactstrap";
+import { Typography } from "@mui/material";
 
-const Step3 = props => {
+const Step3 = (props) => {
   if (props.currentStep !== 3) {
     return null;
   }
@@ -9,21 +9,15 @@ const Step3 = props => {
 
   return (
     <>
-      {/* <FormGroup>
-        <Label for="password">Password</Label>
-        <Input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="Enter your Password"
-          value={props.password} // Prop: The username input data
-          onChange={props.handleChange} // Prop: Puts data into the state
-        />
-      </FormGroup> */}
-
-        <h1>{name}</h1>
-        <h2>{modelId}</h2>
-
+      <Typography variant="h5" gutterBottom>
+        Review Your Details
+      </Typography>
+      <Typography variant="body1">
+        <strong>Project Name:</strong> {name}
+      </Typography>
+      <Typography variant="body1">
+        <strong>Model ID:</strong> {modelId}
+      </Typography>
     </>
   );
 };

@@ -12,7 +12,7 @@ let trainingDataInputs = [];
 let trainingDataOutputs = [];
 let examplesCount = [];
 
-export async function dataGatherLoop(images, name, classIndex) {
+export async function dataGatherLoop(mobnet,images, name, classIndex) {
   CLASS_NAMES.push(name);
   gatherDataState = classIndex;
   if (gatherDataState !== STOP_DATA_GATHER) {
@@ -29,7 +29,7 @@ export async function dataGatherLoop(images, name, classIndex) {
           true
         );
         let normalizedTensorFrame = resizedTensorFrame.div(255);
-        return mobilenet.predict(normalizedTensorFrame.expandDims()).squeeze();
+        return mobnet.predict(normalizedTensorFrame.expandDims()).squeeze();
       });
 
       trainingDataInputs.push(imageFeatures);
@@ -49,13 +49,15 @@ export async function dataGatherLoop(images, name, classIndex) {
   }
 }
 
-export async function trainImageClassifier({projectId, modelName,setProgress}) {
+export async function trainImageClassifier({projectId,mobilenet, modelName,setProgress}) {
   //predict = false;
+  console.log('pid:'+projectId);
   tf.util.shuffleCombo(trainingDataInputs, trainingDataOutputs);
   let outputsAsTensor = tf.tensor1d(trainingDataOutputs, "int32");
   let oneHotOutputs = tf.oneHot(outputsAsTensor, CLASS_NAMES.length);
   let inputsAsTensor = tf.stack(trainingDataInputs);
 
+  
   let results = await model.fit(inputsAsTensor, oneHotOutputs, {
     shuffle: true,
     batchSize: 5,
@@ -90,10 +92,12 @@ export async function loadMobileNetFeatureModel() {
     );
     console.log(answer.shape);
   });
+
+  return mobilenet;
 }
 
 export async function loadImageClassifierModel() {
-  await loadMobileNetFeatureModel();
+  return await loadMobileNetFeatureModel();
 }
 
 export let model = tf.sequential();
@@ -117,7 +121,7 @@ export function initializeModel() {
   });
 }
 
-export function predictLoop(VIDEO, setPredictions) {
+export function predictLoop(VIDEO, setPredictions,mdl,labes) {
   tf.tidy(function () {
     let videoFrameAsTensor = tf.browser.fromPixels(VIDEO).div(255);
     let resizedTensorFrame = tf.image.resizeBilinear(
@@ -140,9 +144,12 @@ export function predictLoop(VIDEO, setPredictions) {
     // );
 
     let predictData = [];
+    if(labes === undefined){
+      labes = CLASS_NAMES;
+    }
     for (let i = 0; i < predictionArray.length; i++) {
       const val = {
-        className : CLASS_NAMES[i],
+        className : labes[i],
         value : predictionArray[i]
       }
       predictData.push(val);
@@ -166,14 +173,16 @@ export async function saveModelToLocalStorage() {
 export async function saveModelToDatabase(projectId, modelName) {
   try {
     const modelJSON = await model.toJSON();
+    console.log("model :"+modelJSON);
+
     const weightData = await model.save(tf.io.withSaveHandler(async (artifacts) => artifacts));
 
     const modelData = {
       projectId: projectId,
       modelName: modelName,
       modelJSON: modelJSON,
-      modelWeights: weightData.weightData,
-      weightSpecs: weightData.weightSpecs
+      classLabels: CLASS_NAMES,
+     
     };
     api.post('/addmodel', modelData)
     .then(res => {

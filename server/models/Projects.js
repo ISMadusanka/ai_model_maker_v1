@@ -9,6 +9,10 @@ const modelSchema = new mongoose.Schema({
     file: {
         type: String, // Store the file path or URL as a string
         required: [true, 'Please provide a file']
+    },
+    classLabels: {
+        type: [String], // Array of class labels
+        required: [true, 'Please provide class labels']
     }
 });
 

@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
 import React from 'react';
+import { Link, NavLink } from 'react-router-dom'; // Import Link and NavLink
 import { useAuth } from '../services/authentication/AuthProvider';
 import { FaUserCircle } from 'react-icons/fa'; // Import user icon
 import api from '../services/api/api';
@@ -11,7 +12,7 @@ import api from '../services/api/api';
 function HomeNavBar() {
   const user = useAuth();
 
-  const onlogoutclick = ()=>{
+  const onlogoutclick = () => {
     api.get('/logout').then((response) => {
       if (response.status === 200) {
         window.location.href = '/';
@@ -24,40 +25,29 @@ function HomeNavBar() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="/">AIModeler</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">AIModeler</Navbar.Brand> {/* Use Link for client-side navigation */}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
+            <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link> {/* Use NavLink for active class handling */}
+            <Nav.Link as={NavLink} to="/docs">Docs</Nav.Link>
           </Nav>
           {user ? (
             <>
-              <Button variant="outline-primary" href="/projects/allprojects" className="me-2">
+              <Button variant="outline-primary" as={Link} to="/projects/allprojects" className="me-2">
                 Go to Console
               </Button>
               <NavDropdown
                 title={<FaUserCircle size={24} />}
                 id="user-nav-dropdown"
-                align="end"  // Correct prop for right alignment
+                align="end"
               >
-                <NavDropdown.Item href="/profile">View Profile</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/profile">View Profile</NavDropdown.Item>
                 <NavDropdown.Item onClick={onlogoutclick}>Log Out</NavDropdown.Item>
               </NavDropdown>
             </>
           ) : (
-            <Button variant="outline-primary" href="/signin">Login</Button>
+            <Button variant="outline-primary" as={Link} to="/signin">Login</Button>
           )}
         </Navbar.Collapse>
       </Container>

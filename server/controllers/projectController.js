@@ -67,7 +67,7 @@ module.exports.addproject_post = async (req, res) => {
 
 // Add a model to a project
 module.exports.addModelToProject_post = async (req, res) => {
-  const { projectId, modelName, modelJSON, modelWeights, weightSpecs } = req.body;
+  const { projectId, modelName, modelJSON, classLabels } = req.body;
   console.log(projectId);
 
   try {
@@ -95,7 +95,8 @@ module.exports.addModelToProject_post = async (req, res) => {
           // Prepare the model data
           const modelData = {
             name: `${modelName}_${Date.now()}`,
-            file: JSON.stringify({ modelJSON, modelWeights, weightSpecs })
+            file: modelJSON,
+            classLabels: classLabels,
           };
 
           // Add the model to the project

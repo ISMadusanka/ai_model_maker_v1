@@ -10,9 +10,10 @@ import LoadingBar from '../../../components/ui/LoadingBar';
 import { useDashboard } from '../../../context/DashboardProvider';
 
 //loader
+var mobilenet = null;
 export async function ImageClassifierPageLoader(){
-  await loadImageClassifierModel();
-  return null;
+  return await loadImageClassifierModel();
+  
 }
 
 export default function ImageClassifierPage() {
@@ -28,11 +29,12 @@ export default function ImageClassifierPage() {
   const nodeRef = useRef(null);
   const [trainProgress, setTrainProgress] = useState(0);
   const { dashboardProps, setDashboardProps } = useDashboard();
-  const { projectID } = dashboardProps;
-  console.log(projectID);
+  // const { projectID } = dashboardProps;
+  // console.log(projectID);
+  let projectID = sessionStorage.getItem("projectID")||null;
   useEffect(() => {
     async function loadModel() {
-      await loadImageClassifierModel();
+      mobilenet = await loadImageClassifierModel();
       setIsLoading(false);
     }
     loadModel();
@@ -60,7 +62,7 @@ export default function ImageClassifierPage() {
     console.log(classes);
     setShowLoadingBarModal(true); // Show the loading bar modal
     for (const classItem of classes) {
-      await dataGatherLoop(classItem.images, classItem.name, classItem.id - 1);
+      await dataGatherLoop(mobilenet,classItem.images, classItem.name, classItem.id - 1);
     }
     initializeModel();
     trainImageClassifier({projectId:projectID,modelName:"model name", setProgress: (progress) => {
@@ -146,7 +148,7 @@ export default function ImageClassifierPage() {
               <Modal.Title>Predict</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <ImageClassifierPredict />
+              <ImageClassifierPredict mobnet={mobilenet} />
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => setShowPredictModal(false)}>

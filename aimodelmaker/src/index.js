@@ -19,6 +19,7 @@ import SettingsPage from './pages/Dashboard/Settings/SettingsPage';
 import AuthProvider from './services/authentication/AuthProvider';
 import ProtectedRoute from './services/authentication/ProtectedRoute';
 import { DashboardProvider } from './context/DashboardProvider';
+import DocsPage from './pages/Docs/Index';
 
 
 
@@ -40,7 +41,11 @@ const router = createBrowserRouter(
             {
               path: 's',
               element: <SignInPage/>
-            }
+            },
+            {
+              path: 'docs',
+              element: <DocsPage/>
+            },
           ]
         },
         
@@ -54,6 +59,7 @@ const router = createBrowserRouter(
           path:'signup',
           element: <SignUpPage/>
         },
+        
 
         {
           path:'projects',

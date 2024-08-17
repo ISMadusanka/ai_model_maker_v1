@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState } from 'react';
 const DashboardContext = createContext();
 
 export function DashboardProvider({ children }) {
-  const [dashboardProps, setDashboardProps] = useState({ projectID: '' });
+  const [dashboardProps, setDashboardProps] = useState({ projectID: null });
 
   return (
     <DashboardContext.Provider value={{ dashboardProps, setDashboardProps }}>

@@ -1,46 +1,82 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { FaHome, FaUser, FaCog, FaBars } from 'react-icons/fa';
-import '../pages/Dashboard/SideBar/Sidebar.css';
+import { FaHome, FaUser, FaCog } from 'react-icons/fa';
 import ProjectsNavBar from '../components/ProjectsNavBar';
-import { Button } from 'react-bootstrap';
+import { Box, Button } from '@mui/material';
+import { styled } from '@mui/system';
 
+const Sidebar = styled('div')({
+  width: '240px',
+  backgroundColor: '#1e88e5',
+  color: '#fff',
+  height: 'calc(100vh - 64px)', // Adjust height to fit below the navbar
+  position: 'fixed',
+  top: '64px', // Adjust the top to be just below the navbar
+  left: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  padding: '20px',
+  overflow: 'hidden',
+});
+
+const Content = styled('div')({
+  marginLeft: '240px',
+  marginTop: '64px', // Adjust margin to fit below the navbar
+  padding: '20px',
+  backgroundColor: '#f5f5f5',
+  minHeight: 'calc(100vh - 64px)', // Adjust height to fit below the navbar
+});
+
+const SidebarItem = styled(NavLink)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: '10px 15px',
+  color: '#fff',
+  textDecoration: 'none',
+  borderRadius: '4px',
+  '&.active': {
+    backgroundColor: '#1565c0',
+  },
+  '&:hover': {
+    backgroundColor: '#1565c0',
+  },
+  span: {
+    marginLeft: '10px',
+    whiteSpace: 'nowrap',
+  },
+}));
 
 const DashboardLayout = () => {
-  const [isOpen, setIsOpen] = useState(false);
- 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
     <>
       <ProjectsNavBar />
-      <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <h3>My Dashboard</h3>
-          <FaBars className="menu-icon" onClick={toggleSidebar} />
-        </div>
-        <nav className="sidebar-nav">
-          <NavLink to="/projects" className={({ isActive }) => (isActive ? 'active' : '')}>
+      <Sidebar>
+        <Box flexGrow={1}>
+          <SidebarItem to="/projects">
             <FaHome />
             <span>Train</span>
-          </NavLink>
-          <NavLink to="models" className={({ isActive }) => (isActive ? 'active' : '')}>
+          </SidebarItem>
+          <SidebarItem to="models">
             <FaUser />
             <span>Models</span>
-          </NavLink>
-          <NavLink to="settings" className={({ isActive }) => (isActive ? 'active' : '')}>
+          </SidebarItem>
+          <SidebarItem to="settings">
             <FaCog />
-            <span>Settings</span>  
-          </NavLink>
-        </nav>
-        <Button>Create New</Button>
-      </div>
-      <div className={`content ${isOpen ? 'open' : ''}`} onClick={() => isOpen && toggleSidebar()}>
-        <FaBars className="menu-icon" onClick={toggleSidebar} />
+            <span>Settings</span>
+          </SidebarItem>
+        </Box>
+        <Button 
+          variant="contained" 
+          color="secondary" 
+          sx={{ mt: 2, width: '100%' }}
+          onClick={() => alert('Create New Item')}
+        >
+          Create New
+        </Button>
+      </Sidebar>
+      <Content>
         <Outlet />
-      </div>
+      </Content>
     </>
   );
 };
