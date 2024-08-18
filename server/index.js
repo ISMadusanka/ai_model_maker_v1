@@ -53,6 +53,7 @@ app.get('/read-cookies', (req, res) => {
     res.json(cookies);
 });
 
-app.listen(4000).on('listening', () => {
+const PORT = process.env.PORT || 5000;
+app.listen(PORT).on('listening', () => {
     console.log('Server is running on port 4000');
 });
