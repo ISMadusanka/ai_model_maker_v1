@@ -6,6 +6,7 @@ const { requireAuth, checkUser } = require('./middleware/authMiddleware');
 const connectDB = require('./config/db');
 const cors = require('cors');
 
+
 const app = express();
 
 // middleware
@@ -51,7 +52,7 @@ app.get('/read-cookies', (req, res) => {
     res.json(cookies);
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT).on('listening', () => {
-    console.log('Server is running on port 4000');
-});
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT).on('listening', () => {
+//     console.log('Server is running on port 5000');
+// });
