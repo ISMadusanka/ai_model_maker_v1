@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance
 const api = axios.create({
-  baseURL: 'http://localhost:4000', 
+  baseURL: 'https://aimodelserver-55ddfo7p6-isuru-sanjeewas-projects-08f4387c.vercel.app', 
   headers: {
     'Content-Type': 'application/json',
   },
