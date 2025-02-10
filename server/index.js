@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: 'https://ai-model-maker-v1-rztw.vercel.app', // Replace with your allowed origin
+    origin: ['https://ai-model-maker-v1-rztw.vercel.app','http://localhost:3000'], // Replace with your allowed origin
     credentials: true, // Allow credentials (cookies) to be sent
     optionsSuccessStatus: 200 // Some legacy browsers choke on 204
   };

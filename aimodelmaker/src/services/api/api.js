@@ -2,7 +2,8 @@ import axios from 'axios';
 
 // Create an Axios instance
 const api = axios.create({
-  baseURL: 'https://ai-model-maker-v1-server.vercel.app', 
+  // baseURL: 'https://ai-model-maker-v1-server.vercel.app', 
+  baseURL: 'http://localhost:5000',
   headers: {
     'Content-Type': 'application/json',
   },
