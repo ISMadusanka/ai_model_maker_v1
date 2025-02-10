@@ -136,12 +136,29 @@ export default function ImageClassifierPage() {
               </TransitionGroup>
             </Row>
           </Container>
-          <Button variant="primary" onClick={handleTrainClick}>
-            Train Model
-          </Button>
-            
-          <Button variant="primary" onClick={() => setShowPredictModal(true)}>Predict</Button>
-          <Button onClick={hc}>Load</Button>
+          <Button
+  variant="primary"
+  onClick={handleTrainClick}
+  style={{ marginRight: "10px", minWidth: "120px", height: "40px" }}
+>
+  Train Model
+</Button>
+
+<Button
+  variant="primary"
+  onClick={() => setShowPredictModal(true)}
+  style={{ marginRight: "10px", minWidth: "120px", height: "40px" }}
+>
+  Predict
+</Button>
+
+<Button
+  onClick={hc}
+  style={{ minWidth: "120px", height: "40px" }}
+>
+  Load
+</Button>
+
 
           <Modal show={showPredictModal} onHide={() => setShowPredictModal(false)} centered>
             <Modal.Header closeButton>

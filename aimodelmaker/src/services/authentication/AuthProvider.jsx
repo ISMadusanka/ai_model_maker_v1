@@ -77,7 +77,7 @@ export default function AuthProvider({children}) {
     
     if (isTokenFetching) {
         // Optionally, you can render a loading spinner or a placeholder while the token is being fetched
-        return <div>Loading...</div>;
+        return <div></div>;
     }
 
     return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;

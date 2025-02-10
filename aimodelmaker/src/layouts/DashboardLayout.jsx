@@ -9,9 +9,9 @@ const Sidebar = styled('div')({
   width: '240px',
   backgroundColor: '#1e88e5',
   color: '#fff',
-  height: 'calc(100vh - 64px)', // Adjust height to fit below the navbar
+  height: 'calc(100vh - 64px)',
   position: 'fixed',
-  top: '64px', // Adjust the top to be just below the navbar
+  top: '64px',
   left: 0,
   display: 'flex',
   flexDirection: 'column',
@@ -21,13 +21,13 @@ const Sidebar = styled('div')({
 
 const Content = styled('div')({
   marginLeft: '240px',
-  marginTop: '64px', // Adjust margin to fit below the navbar
+  marginTop: '64px',
   padding: '20px',
   backgroundColor: '#f5f5f5',
-  minHeight: 'calc(100vh - 64px)', // Adjust height to fit below the navbar
+  minHeight: 'calc(100vh - 64px)',
 });
 
-const SidebarItem = styled(NavLink)(({ theme }) => ({
+const SidebarItem = styled(NavLink)({
   display: 'flex',
   alignItems: 'center',
   padding: '10px 15px',
@@ -40,11 +40,11 @@ const SidebarItem = styled(NavLink)(({ theme }) => ({
   '&:hover': {
     backgroundColor: '#1565c0',
   },
-  span: {
+  '& span': {
     marginLeft: '10px',
     whiteSpace: 'nowrap',
   },
-}));
+});
 
 const DashboardLayout = () => {
   return (
@@ -52,22 +52,31 @@ const DashboardLayout = () => {
       <ProjectsNavBar />
       <Sidebar>
         <Box flexGrow={1}>
-          <SidebarItem to="/projects">
+          <SidebarItem 
+            to="/projects" 
+            end // Add this to ensure exact matching
+          >
             <FaHome />
             <span>Train</span>
           </SidebarItem>
-          <SidebarItem to="models">
+          <SidebarItem 
+            to="/projects/models" 
+            end // Add this to ensure exact matching
+          >
             <FaUser />
             <span>Models</span>
           </SidebarItem>
-          <SidebarItem to="settings">
+          <SidebarItem 
+            to="/projects/settings"
+            end // Add this to ensure exact matching
+          >
             <FaCog />
             <span>Settings</span>
           </SidebarItem>
         </Box>
-        <Button 
-          variant="contained" 
-          color="secondary" 
+        <Button
+          variant="contained"
+          color="secondary"
           sx={{ mt: 2, width: '100%' }}
           onClick={() => alert('Create New Item')}
         >
